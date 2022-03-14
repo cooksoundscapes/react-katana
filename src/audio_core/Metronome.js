@@ -9,7 +9,12 @@ export default class Metronome {
         this.playing = false;
         this.barLength = 4;
         this.barRatio = 1;
-        this.seconds = audioctx.currentTime;
+        try {
+            this.seconds = audioctx.currentTime;
+        } catch(err) {
+            console.log("Warning: Attempted to create Metronome before the audio context!");
+            this.seconds = 0
+        }
         //this.animatedBox = document.querySelector('.play_animation');
         
         // audible click params;
@@ -23,8 +28,8 @@ export default class Metronome {
         this.clickLevel = .2;
     }
 
-    set tempo(v) {
-        this._tempo = v;
+    set tempo(value) {
+        this._tempo = value;
         let speed = this._tempo * this._div;
         //this.animatedBox.style.setProperty('--speed',speed*2+'ms');
         if (this.playing) {

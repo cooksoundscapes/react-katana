@@ -1,27 +1,14 @@
 import styles from "../styles/menu.module.scss"
 import { Button, FileButton } from "./atoms"
 import { VolumeSlider, Transport } from "."
-import { useDispatch } from "react-redux"
-import { startDSP, addTrack } from "../audio_core/redux_store"
-import { useTracks } from "../audio_core/idb_store"
+import { useAudio } from "../audio_core/AudioContext"
 
 export function MainMenu(props) 
 {
-    const dispatch = useDispatch();
+    const { createTrack } = useAudio();
 
-    const setFiles = files => 
-    {
-        dispatch(startDSP());
-
-        files.forEach( file => {
-            console.log(file)
-            const fileInfo = {
-                name: file.name,
-                tempo: findTempo(file)
-            }
-            console.log(fileInfo)
-            dispatch( addTrack(fileInfo) );
-        });
+    const setFiles = files => {
+        files.forEach( file => createTrack(file) );
     }
 
     return (

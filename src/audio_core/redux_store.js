@@ -3,23 +3,12 @@ import { createSlice, configureStore } from '@reduxjs/toolkit'
 const trackSlice = createSlice({
   name: 'track',
   initialState: {
-    tracks: [],
-    generate_id: 0,
-    masterVolume: null,
-    audioctx: null // audioContext
+    tracks: []
   },
   reducers: {
-    startDSP: state => {
-        state.audioctx = new (window.AudioContext || window.webkitAudioContext);
-        state.masterVolume = audioctx.createGain(1);
-        state.masterVolume.connect(audioctx.destination);
-    },
-    setMasterVolume: (state, newVolume) => {
-        state.masterVolume.gain.value = newVolume.payload;
-    },
     addTrack: (state, fileInfo) => {
         const newTrack = {
-            id: state.generate_id++,
+            id: fileInfo.payload.id,
             filename: fileInfo.payload.name,
             tempo: fileInfo.payload.tempo,
             level: 1,
@@ -41,7 +30,7 @@ const trackSlice = createSlice({
   }
 })
 
-export const { startDSP, addTrack, removeTrack } = trackSlice.actions
+export const { addTrack, removeTrack } = trackSlice.actions
 
 export const store = configureStore({
   reducer: trackSlice.reducer

@@ -1,16 +1,16 @@
 import { render } from "react-dom"
 import { MainMenu, TrackContainer } from "./components"
-import TrackProvider from "./audio_core/idb_store"
+import AudioProvider from "./audio_core/AudioContext"
 import { store } from "./audio_core/redux_store"
 import { Provider } from "react-redux"
 import "./styles/baseline.css"
 
 render(
     <Provider store={store}>
-    <TrackProvider>
+    <AudioProvider>
         <MainMenu />
         <TrackContainer />
-    </TrackProvider>
+    </AudioProvider>
     </Provider>,
     document.getElementById("root")
 )
