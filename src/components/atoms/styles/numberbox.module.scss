@@ -1,0 +1,11 @@
+@use "library" as *;
+
+.box {
+    @include labelBox;
+    max-width: 4em;
+    text-align: center;
+}
+
+.label {
+    @include controlText
+}

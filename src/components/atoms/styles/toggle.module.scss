@@ -1,0 +1,18 @@
+@use "library" as *;
+
+.container {
+    input[type="checkbox"] {
+        display: none;
+    }
+    .interactive {
+        @include button_commons;
+        padding: .25em .5em;
+        text-transform: none;
+        font-weight: normal;
+        border-radius: calc($core_spacing / 2);
+    }
+    input:checked + .interactive{
+        background-color: $core_light_orange;
+        color: black;
+    }
+}

@@ -1,0 +1,5 @@
+@use "library" as *;
+
+.box {
+    @include labelBox
+}

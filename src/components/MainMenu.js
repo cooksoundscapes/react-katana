@@ -12,11 +12,11 @@ export function MainMenu(props)
     }
 
     return (
-        <section className={styles.menuBody}>
+        <aside className={styles.menuBody}>
             <FileButton fileList={setFiles}>Open local file</FileButton>
             <Button>Record Now</Button>
             <VolumeSlider label="Master" />
             <Transport />
-        </section>
+        </aside>
     )
 }

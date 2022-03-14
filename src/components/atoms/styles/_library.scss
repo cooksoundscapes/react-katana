@@ -13,10 +13,30 @@
     font-weight: 600;
     text-transform: uppercase;
     transition: 0.2s;
+    user-select: none;
     &:hover {
         background-color: $dark_orange;
     }   
     &:active {
         background-color: $light_orange;
     }
+}
+
+@mixin controlText {
+    vertical-align: center;
+    font-size: 14px;
+    color: white;
+    padding: .25em .5em;
+}
+
+@mixin labelBox {
+    display: inline-block;
+    background-color: $dark_grey; 
+    color: white;
+    border: 1px solid black;
+    padding: .25em .5em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    vertical-align: center;
+    font-size: 14px;
 }
