@@ -1,9 +1,9 @@
 import styles from "./slices.module.scss"
 import { useAudio } from "../../audio_core/AudioContext"
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { SpinLoader } from "../atoms"
 
-export default function SliceArray({sliceCount, trackId, audioIsLoaded})
+export default function SliceArray({sliceCount, trackId, audioIsLoaded, sliceLabels})
 {
     const {play, drawWave} = useAudio();
     const canvasRef = useRef();
@@ -22,11 +22,15 @@ export default function SliceArray({sliceCount, trackId, audioIsLoaded})
 
         for (let i = 0; i < sliceCount; i++) {
             sliceArray.push(
+                <React.Fragment key={i} >
                 <button 
-                    key={i} 
                     className={styles.slice}
-                    onClick={ () => play(i, trackId) }
-                ></button>
+                    onClick={ () => play(i, trackId) } >
+                        {sliceLabels ? sliceLabels[i] : null}
+                </button>
+                {i != sliceCount - 1 ? <span className={styles.divisor}></span> : null}
+                </React.Fragment>
+
             )
         }
         return sliceArray;

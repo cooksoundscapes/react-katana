@@ -3,10 +3,12 @@ import styles from "./styles/numberbox.module.scss"
 export function NumberBox({children, min, max, defaultValue, getValue}) 
 {
     const changeValue = event => {
-        if (getValue) getValue(event.target.value)
+        const value = parseInt(event.target.value);
+        
+        if (!isNaN(value) && getValue) getValue(value)
     }
     return (
-        <label className={styles.label}>
+        <label className={styles.label}>    
             {children}  
             {" "}
             <input 

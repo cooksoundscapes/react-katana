@@ -60,8 +60,17 @@ export default function AudioProvider({children})
         AudioControl.playTrack(slice, trackInfo);
     }
 
+    const keyboardPlay = (coord) => {
+        const matches = tracks.filter( track => track.keyboardRow === coord[0])
+        matches.forEach( track => {
+            AudioControl.playTrack(coord[1], track)
+        })
+    }
+
     return (
-        <AudioContext.Provider value={{createTrack, setMasterVolume, drawWave, play}}>
+        <AudioContext.Provider value={{
+            createTrack, setMasterVolume, drawWave, play, keyboardPlay
+        }}>
             {children}
         </AudioContext.Provider>
     )

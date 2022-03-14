@@ -13,6 +13,13 @@ export default function CommandBar({trackId, ...props})
         )
     }
 
+    const KBRowOptions = ["none", "QWERT...", "ASDF...", "ZXCV..."];
+
+    const selectKBRow = (value) => {
+        const ind = KBRowOptions.findIndex( opt => opt === value);
+        updateStore("keyboardRow", ind - 1)
+    }
+
     return (
         <div className={styles.container}>
             <LabelBox>{props.name}</LabelBox>
@@ -31,15 +38,22 @@ export default function CommandBar({trackId, ...props})
                 Reverse
             </Toggle>
             <NumberBox 
+                min={1}
+                max={64}
                 defaultValue={8}
                 getValue={value => updateStore("slices", value) } >
                 Slices:
             </NumberBox>
             <NumberBox 
+                min={0}
                 defaultValue={trackId}
                 getValue={value => updateStore("group", value) } >
                 Group:
             </NumberBox>
+            <DropDownList 
+                options={KBRowOptions}
+                getValue={selectKBRow}
+            />
         </div>
     )
 }
