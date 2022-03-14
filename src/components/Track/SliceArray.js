@@ -34,9 +34,9 @@ export default function SliceArray({sliceCount, trackId, audioIsLoaded})
 
     return (
         <div className={styles.container}>
-            { !audioIsLoaded ? <SpinLoader /> : null }
+            { !audioIsLoaded ? <SpinLoader />  : null }
             <canvas ref={canvasRef} />
-            { generateSlices() }
+            { audioIsLoaded ? generateSlices() : null }
         </div>
     )
 }

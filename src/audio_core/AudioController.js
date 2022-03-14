@@ -57,15 +57,15 @@ export default class AudioController
         let length;
 
         switch (trackInfo.playStyle) {
-            case "oneshot":
+            case "Oneshot":
                 length = track.buffer.duration - (track.buffer.duration * (slice/trackInfo.slices));
                 track.playhead.start(0, startPoint, length)
                 break;
-            case "looped":
+            case "Looped":
                 track.playhead.loop = true;
                 track.playhead.start(0, startPoint);
                 break;
-            case "slices":
+            case "Slices":
                 length = track.buffer.duration * (1/trackInfo.slices)
                 track.playhead.start(0, startPoint, length)
                 break;
