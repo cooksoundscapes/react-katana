@@ -5,7 +5,7 @@ import { useAudio } from "../audio_core/AudioContext"
 
 export function MainMenu(props) 
 {
-    const { createTrack } = useAudio();
+    const { createTrack, setMasterVolume } = useAudio();
 
     const setFiles = files => {
         files.forEach( file => createTrack(file) );
@@ -15,7 +15,7 @@ export function MainMenu(props)
         <aside className={styles.menuBody}>
             <FileButton fileList={setFiles}>Open local file</FileButton>
             <Button>Record Now</Button>
-            <VolumeSlider label="Master" />
+            <VolumeSlider label="Master" getVolume={setMasterVolume} />
             <Transport />
         </aside>
     )

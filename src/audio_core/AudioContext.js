@@ -38,8 +38,12 @@ export default function AudioProvider({children})
         dispatch( addTrack(fileInfo) );
     }
 
+    const setMasterVolume = value => {
+        AudioControl.setMasterVol(value)
+    }
+
     return (
-        <AudioContext.Provider value={{createTrack}}>
+        <AudioContext.Provider value={{createTrack, setMasterVolume}}>
             {children}
         </AudioContext.Provider>
     )

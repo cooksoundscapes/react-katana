@@ -16,6 +16,7 @@ export default class AudioController
     }
 
     setMasterVol(value) {
+        if (!this.ctx) this.startDSP();
         this.masterVol.gain.value = value
     }
 

@@ -14,8 +14,8 @@ export default function CommandBar(props)
             />
             <Toggle>Snap to Beat</Toggle>
             <Toggle>Reverse</Toggle>
-            <NumberBox>Slices:</NumberBox>
-            <NumberBox>Group:</NumberBox>
+            <NumberBox defaultValue={props.slices}>Slices:</NumberBox>
+            <NumberBox defaultValue={props.group}>Group:</NumberBox>
         </div>
     )
 }
