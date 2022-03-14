@@ -8,7 +8,7 @@ html, body {
     font-family: sans-serif;
 }
 
-body, #root {
+html, body, #root {
     height: 100vh;
 }
 

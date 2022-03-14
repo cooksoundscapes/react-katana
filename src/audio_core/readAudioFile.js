@@ -8,7 +8,7 @@ export default function readAudioFile(file, audioctx)
             audioctx.decodeAudioData(arrayBuffer).then(
                 audioBuffer => resolve(audioBuffer) 
             ), err => {
-                reject("Unable to load file")
+                reject(err)
             }
         }
     })

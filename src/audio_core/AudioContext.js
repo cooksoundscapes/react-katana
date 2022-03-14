@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useEffect } from "react"
-import { useDispatch } from "react-redux"
+import { createContext, useContext, useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { addTrack } from "../audio_core/redux_store"
 import AudioController from "./AudioController";
 import readAudioFile from "./readAudioFile";
@@ -16,6 +16,7 @@ const AudioControl = new AudioController();
 export default function AudioProvider({children})
 {
     const dispatch = useDispatch();
+    const tracks = useSelector(state => state.tracks)
 
     const createTrack = (file) => {
         /* here, the "unserializable" data will be handled by
@@ -23,11 +24,11 @@ export default function AudioProvider({children})
          * the Redux store. 
          */
         AudioControl.startDSP();
-        //Id generation handled over the audio control object;
-        let newId = 0;
+        let newId = AudioController.generateId();
+        
         readAudioFile(file, AudioControl.ctx).then(
             audioBuffer => {
-                newId = AudioControl.addBuffer(audioBuffer)
+                AudioControl.addBuffer(audioBuffer, newId)
             }
         )
         const fileInfo = {
@@ -42,8 +43,13 @@ export default function AudioProvider({children})
         AudioControl.setMasterVol(value)
     }
 
+    const play = (slice, trackId) => {
+        const trackInfo = tracks.find( track => track.id === trackId);
+        AudioControl.playTrack(slice, trackInfo);
+    }
+
     return (
-        <AudioContext.Provider value={{createTrack, setMasterVolume}}>
+        <AudioContext.Provider value={{createTrack, setMasterVolume, play}}>
             {children}
         </AudioContext.Provider>
     )

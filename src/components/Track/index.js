@@ -5,8 +5,8 @@ import SliceArray from "./SliceArray"
 export default function(props) {
     return (
         <div>
-            <CommandBar/>
-            <SliceArray />
+            <CommandBar name={props.name} trackId={props.trackId}/>
+            <SliceArray trackId={props.trackId}/>
         </div>
     )
 }

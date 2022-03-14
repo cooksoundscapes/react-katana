@@ -5,7 +5,7 @@ export default function CommandBar(props)
 {
     return (
         <div className={styles.container}>
-            <LabelBox>Name</LabelBox>
+            <LabelBox>{props.name}</LabelBox>
             <DropDownList 
                 options={["Oneshot", "Looped", "Slices"]} 
             />
@@ -14,8 +14,8 @@ export default function CommandBar(props)
             />
             <Toggle>Snap to Beat</Toggle>
             <Toggle>Reverse</Toggle>
-            <NumberBox defaultValue={props.slices}>Slices:</NumberBox>
-            <NumberBox defaultValue={props.group}>Group:</NumberBox>
+            <NumberBox defaultValue={8}>Slices:</NumberBox>
+            <NumberBox defaultValue={props.trackId}>Group:</NumberBox>
         </div>
     )
 }
