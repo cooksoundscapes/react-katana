@@ -32,6 +32,11 @@ export default class AudioController
             gainCtrl: null
         })
     }
+    getBufferById(id) {
+        const buffObj = this.trackPlayers.find( trk => trk.id === id);
+        if (buffObj) return buffObj.buffer;
+    }
+
     playTrack(slice, trackInfo) {
         const track = this.trackPlayers.find( track => track.id === trackInfo.id); 
 
@@ -54,7 +59,6 @@ export default class AudioController
         switch (trackInfo.playStyle) {
             case "oneshot":
                 length = track.buffer.duration - (track.buffer.duration * (slice/trackInfo.slices));
-                console.log(length)
                 track.playhead.start(0, startPoint, length)
                 break;
             case "looped":

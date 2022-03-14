@@ -10,11 +10,7 @@ export function TrackContainer(props)
         <main className={styles.mainBody} >
         {
             trackList.map( (track, i) => (
-                <Track 
-                    key={i}
-                    name={track.filename}
-                    trackId={track.id}
-                />
+                <Track key={i} trackInfo={track} />
             ))
         }
         </main>

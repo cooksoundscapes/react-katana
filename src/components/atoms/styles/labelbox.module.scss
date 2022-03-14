@@ -1,5 +1,6 @@
 @use "library" as *;
 
 .box {
-    @include labelBox
+    @include labelBox;
+    width: 10em;    
 }
