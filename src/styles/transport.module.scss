@@ -1,0 +1,32 @@
+@use "library" as lib;
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: inline-block;
+    background-color: lib.$primary_orange;
+    border-radius: lib.$spacing;
+    overflow: hidden;
+    button {
+        margin: 0;
+        height: 100%;
+        flex: 1;
+        background: none;
+        border: none;
+        transition: .2s;
+        padding: 1em .5em;
+        &:hover {
+            background-color: lib.$dark_orange;
+        }
+        &:active {
+            background-color: lib.$light_orange;
+        }
+    }
+    span {
+        display: inline-block;
+        width: 1px;
+        height: 80%;
+        background-color: black;
+    }
+}

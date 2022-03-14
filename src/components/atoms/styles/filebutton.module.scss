@@ -1,0 +1,8 @@
+@use 'library' as *;
+
+.container {
+    @include button_commons;
+    input[type="file"] {
+        display: none;
+    }
+}

@@ -1,0 +1,6 @@
+@use "library" as lib;
+
+.mainBody {
+    flex: 1;
+    background-color: lib.$black;
+}

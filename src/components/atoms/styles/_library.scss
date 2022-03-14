@@ -1,0 +1,22 @@
+@use '../../../styles/library' as *;
+@forward '../../../styles/library' as core_*;
+
+@mixin button_commons {
+    display: inline-block;
+    background-color: $primary_orange;
+    border: none;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    padding: 1em 2em;
+    border-radius: $spacing;
+    font-weight: 600;
+    text-transform: uppercase;
+    transition: 0.2s;
+    &:hover {
+        background-color: $dark_orange;
+    }   
+    &:active {
+        background-color: $light_orange;
+    }
+}
