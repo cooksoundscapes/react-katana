@@ -1,14 +1,28 @@
 @use "../../styles/library" as *;
 
+.handlersArea {
+    border: 1px solid black;
+    height: 18px;
+    background-color: $primary_grey;
+}
+
 .container {
     display: flex;
+    justify-content: start;
     position: relative;
     height: 120px;
+    left: 0;
     canvas {
         position: absolute;
         width: 100%;
         height: 100%
     }
+}
+
+.slicesArea {   
+    position: relative;
+    display: flex;
+    height: 100%;
 }
 
 .slice {
@@ -35,8 +49,9 @@
     background-color: black;
 }
 
-.handlersArea {
-    position: relative;
-    border: 1px solid black;
-    height: 18px;
+.grayArea {
+    height: 100%;
+    background-color: black;
+    opacity: .5;
+    z-index: 10;
 }

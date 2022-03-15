@@ -2,6 +2,7 @@
 
 .handler {
     position: absolute;
+    top: 0;
     z-index: 20;
     width: 2px;
     height: 100%;
@@ -12,22 +13,22 @@
     &[side="left"]::before {
         content: '';
         position: absolute;
-        top: -16px;
+        top: -17px;
         left: 0px;
         width: 0;
         height: 0;
-        border-top: 18px solid $core_primary_orange;
+        border-top: 20px solid $core_primary_orange;
         border-right: 12px solid transparent;
         border-bottom: 12px solid transparent;
     }
     &[side="right"]::before {
         content: '';
         position: absolute;
-        top: -16px;
+        top: -17px;
         left: -10px;
         width: 0;
         height: 0;
-        border-top: 18px solid $core_primary_orange;
+        border-top: 20px solid $core_primary_orange;
         border-left: 12px solid transparent;
         border-bottom: 12px solid transparent;
     }

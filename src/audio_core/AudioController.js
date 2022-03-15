@@ -52,13 +52,16 @@ export default class AudioController
 
         track.playhead.connect(track.gainCtrl);
 
-        const startPoint = (slice/trackInfo.slices) * track.buffer.duration;
+        const sliceRatio =(slice/trackInfo.slices);
 
+        const duration = track.buffer.duration * (trackInfo.trimEnd - trackInfo.trimStart)
+        
+        const startPoint = (track.buffer.duration * trackInfo.trimStart) + (duration * sliceRatio);
         let length;
 
         switch (trackInfo.playStyle) {
             case "Oneshot":
-                length = track.buffer.duration - (track.buffer.duration * (slice/trackInfo.slices));
+                length = duration - (duration * sliceRatio);
                 track.playhead.start(0, startPoint, length)
                 break;
             case "Looped":
@@ -66,7 +69,7 @@ export default class AudioController
                 track.playhead.start(0, startPoint);
                 break;
             case "Slices":
-                length = track.buffer.duration * (1/trackInfo.slices)
+                length = duration * (1/trackInfo.slices)
                 track.playhead.start(0, startPoint, length)
                 break;
             default: 

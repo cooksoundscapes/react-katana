@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack serve --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "lan": "webpack serve --host 192.168.12.21 --config webpack.dev.js"
+    "lan": "webpack serve --host 192.168.15.94 --config webpack.dev.js"
   },
   "keywords": [],
   "author": "",

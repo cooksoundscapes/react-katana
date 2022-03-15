@@ -1,6 +1,6 @@
 import CommandBar from "./CommandBar"
-import SliceArray from "./SliceArray"
 import { Grid } from "../KeyboardSequencer"
+import SliceBox from "./SliceBox"
 
 export default function({trackInfo}) 
 {
@@ -10,7 +10,7 @@ export default function({trackInfo})
                 name={trackInfo.filename} 
                 trackId={trackInfo.id}
             />
-            <SliceArray 
+            <SliceBox 
                 audioIsLoaded={trackInfo.tempo > 0}
                 sliceCount={trackInfo.slices} 
                 trackId={trackInfo.id}

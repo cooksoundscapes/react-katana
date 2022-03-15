@@ -7,5 +7,6 @@
 }
 
 .label {
-    @include controlText
+    @include controlText;
+    padding: 0;
 }
