@@ -1,3 +1,5 @@
+@use "../../styles/library" as *;
+
 .container {
     display: flex;
     position: relative;
@@ -30,5 +32,11 @@
     z-index: 10;
     width: 1px;
     height: 100%;
-    background-color: #101010;
+    background-color: black;
+}
+
+.handlersArea {
+    position: relative;
+    border: 1px solid black;
+    height: 18px;
 }

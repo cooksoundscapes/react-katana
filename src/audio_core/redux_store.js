@@ -17,6 +17,8 @@ const trackSlice = createSlice({
                 syncMode: "Free",
                 snapToBeat: false,
                 reverse: false,
+                trimStart: 0,
+                trimEnd: 0,
                 speed: 1,
                 keyboardRow: null,
                 group: 1

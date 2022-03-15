@@ -8,6 +8,7 @@ export function TrackContainer(props)
     const trackList = useSelector(state => state.tracks)
 
     return (
+        <>
         <main className={styles.mainBody} >
             <KeyboardSequencer/>
         {
@@ -16,5 +17,7 @@ export function TrackContainer(props)
             ))
         }
         </main>
+        <aside style={{flex: .05, background: "black"}}></aside>
+        </>
     )
 }

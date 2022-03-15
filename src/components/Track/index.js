@@ -5,7 +5,7 @@ import { Grid } from "../KeyboardSequencer"
 export default function({trackInfo}) 
 {
     return (
-        <div>
+        <div style={{overflow: "hidden"}}>
             <CommandBar 
                 name={trackInfo.filename} 
                 trackId={trackInfo.id}
