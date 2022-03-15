@@ -5,15 +5,19 @@ import AudioController from "./AudioController";
 import readAudioFile from "./readAudioFile";
 import findTempo from "./findTempo"
 import drawWaveForm from "./drawWaveform"
+import Metronome from "./Metronome";
 /*
+This is the front layer of the audio API; components should only talk to this 
+context in order to interact with AudioController or Store.
+
 IndexedDB API should be used for caching of audio files;
 calls are encapsulated with ContextAPI from React;
-
-Redux is still needed, though.
 */
 const AudioContext = createContext();
 
 const AudioControl = new AudioController();
+
+const Metro = new Metronome();
 
 export default function AudioProvider({children})
 {
@@ -26,6 +30,11 @@ export default function AudioProvider({children})
          * the Redux store. 
          */
         AudioControl.startDSP();
+        if (!Metro.ctx) {
+            Metro.activate(AudioControl.ctx);
+            AudioControl.metronome = Metro;
+        }
+
         let newId = AudioController.generateId();
         
         readAudioFile(file, AudioControl.ctx).then(
@@ -55,6 +64,14 @@ export default function AudioProvider({children})
         drawWaveForm(buffer, canvas);
     }
 
+    const setParam = (id, param, value) => {
+        if ( ["trimStart", "trimEnd", "playStyle"].includes(param) )
+        {
+            AudioControl.changeLive(id, param, value)
+        }   
+        dispatch ( changeTrack({id: id, [param]: value}) )
+    }
+
     const play = (slice, trackId) => {
         const trackInfo = tracks.find( track => track.id === trackId);
         AudioControl.playTrack(slice, trackInfo);
@@ -69,7 +86,7 @@ export default function AudioProvider({children})
 
     return (
         <AudioContext.Provider value={{
-            createTrack, setMasterVolume, drawWave, play, keyboardPlay
+            createTrack, setMasterVolume, drawWave, play, keyboardPlay, setParam
         }}>
             {children}
         </AudioContext.Provider>

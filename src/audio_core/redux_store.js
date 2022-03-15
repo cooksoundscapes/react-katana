@@ -27,6 +27,8 @@ const trackSlice = createSlice({
         },
         changeTrack: (state, update) => {
             const track = state.tracks.find( track => track.id == update.payload.id);
+            if (!track) { console.log("track not found") ; return }
+
             Object.entries(update.payload).forEach( ([key, value]) => {
                 if (key !== "id" && key in track) {
                     track[key] = value;

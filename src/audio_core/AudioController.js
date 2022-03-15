@@ -5,6 +5,7 @@ export default class AudioController
         this.ctx = null;
         this.masterVol = null;
         this.trackPlayers = [];
+        this.metronome = null;
     }
 
     static id_generator = 0;
@@ -37,9 +38,29 @@ export default class AudioController
         if (buffObj) return buffObj.buffer;
     }
 
+    changeLive(id, param, value) {
+        const track = this.trackPlayers.find( track => track.id === id); 
+        if (!track) { console.log("track not found") ; return }
+        if (!track.playhead) { console.log("track never played") ; return }
+
+        switch (param) {
+            case "trimStart":
+                track.playhead.loopStart = value * track.buffer.duration;
+                break;
+            case "trimEnd":
+                track.playhead.loopEnd = value * track.buffer.duration;
+                break;
+            case "playStyle":
+                track.playhead.loop = (value == "Looped");
+                break;
+        }
+    }
+
     playTrack(slice, trackInfo) {
         const track = this.trackPlayers.find( track => track.id === trackInfo.id); 
 
+        if (!track) { console.log("track not found") ; return }
+        
         if (track.playhead) track.playhead.stop();
 
         track.playhead = this.ctx.createBufferSource();
@@ -66,6 +87,8 @@ export default class AudioController
                 break;
             case "Looped":
                 track.playhead.loop = true;
+                track.playhead.loopStart = trackInfo.trimStart * track.buffer.duration;
+                track.playhead.loopEnd = trackInfo.trimEnd * track.buffer.duration;
                 track.playhead.start(0, startPoint);
                 break;
             case "Slices":

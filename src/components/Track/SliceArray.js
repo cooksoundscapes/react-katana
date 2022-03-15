@@ -2,7 +2,8 @@ import styles from "./slices.module.scss"
 import { useAudio } from "../../audio_core/AudioContext"
 import React from "react";
 
-export default function SliceArray({sliceCount, trackId, audioIsLoaded, sliceLabels, trimBars})
+export default function SliceArray
+({sliceCount, trackId, audioIsLoaded, sliceLabels, trimBars})
 {
     if (!audioIsLoaded) return null;
 
