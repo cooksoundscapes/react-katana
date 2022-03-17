@@ -6,5 +6,5 @@ export default function findTempo(duration)
     while (tempo > 800) {      // caps on 75 bpm
         tempo = tempo / 2;
     }
-    return bpm_or_ms(tempo);
+    return tempo;
 }

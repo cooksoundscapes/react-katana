@@ -1,6 +1,6 @@
 import styles from "./styles/dropdown.module.scss"
 
-export function DropDownList({options, getValue, ...props})
+export function DropDownList({options, getValue, setValue,})
 {
     if (!options) options = []
 
@@ -9,7 +9,7 @@ export function DropDownList({options, getValue, ...props})
     }
 
     return(
-        <select className={styles.box} onChange={valueChange}>
+        <select className={styles.box} onChange={valueChange} value={setValue}>
         {
             options.map( (opt,i) => {
                 return <option key={i}>{opt}</option>

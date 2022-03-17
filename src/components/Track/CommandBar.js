@@ -2,7 +2,7 @@ import { LabelBox, DropDownList, Toggle, NumberBox } from "../atoms"
 import styles from "./bar.module.scss"
 import { useAudio } from "../../audio_core/AudioContext"
 
-export default function CommandBar({trackId, ...props})
+export default function CommandBar({trackId, syncMode, playStyle, name})
 {
     const {setParam} = useAudio();
 
@@ -15,14 +15,16 @@ export default function CommandBar({trackId, ...props})
 
     return (
         <div className={styles.container}>
-            <LabelBox>{props.name}</LabelBox>
+            <LabelBox>{name}</LabelBox>
             <DropDownList 
                 options={["Oneshot", "Looped", "Slices"]} 
                 getValue={value => setParam(trackId, "playStyle", value) }
+                setValue={playStyle}
             />
             <DropDownList 
                 options={["Free", "Follow", "Lead"]}
                 getValue={value => setParam(trackId, "syncMode", value) }
+                setValue={syncMode}
             />
             <Toggle getValue={value => setParam(trackId, "beatSnap", value) } >
                 Snap to Beat

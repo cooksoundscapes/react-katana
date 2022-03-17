@@ -6,6 +6,7 @@ import readAudioFile from "./readAudioFile";
 import findTempo from "./findTempo"
 import drawWaveForm from "./drawWaveform"
 import Metronome from "./Metronome";
+import bpm_or_ms from "./bpm_or_ms";
 /*
 This is the front layer of the audio API; components should only talk to this 
 context in order to interact with AudioController or Store.
@@ -44,7 +45,7 @@ export default function AudioProvider({children})
                 dispatch( changeTrack({
                     id: newId, 
                     tempo: guessedTempo
-                }) );
+                }));
             }
         )
         const fileInfo = {
@@ -64,11 +65,21 @@ export default function AudioProvider({children})
         drawWaveForm(buffer, canvas);
     }
 
+    const switchLead = (id) => {
+        const lastLeader = tracks.find(track => track.syncMode === "Lead");
+        const newLeader = tracks.find(track => track.id === id);
+        AudioControl.tempo = newLeader.tempo;
+        if (lastLeader)
+            dispatch( changeTrack({id: lastLeader.id, syncMode: "Follow"}) )
+    }
+
     const setParam = (id, param, value) => {
-        if ( ["trimStart", "trimEnd", "playStyle"].includes(param) )
-        {
+        if ( ["trimStart", "trimEnd", "playStyle"].includes(param) ) {
             AudioControl.changeLive(id, param, value)
-        }   
+        } 
+        if (param === "syncMode") {
+            if (value === "Lead") switchLead(id);
+        }
         dispatch ( changeTrack({id: id, [param]: value}) )
     }
 

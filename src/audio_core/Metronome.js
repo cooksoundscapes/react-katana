@@ -4,8 +4,8 @@ export default class Metronome
         this.ctx = null;
         this.seconds = null;
 
-        this._tempo = 500;
-        this._division = 1;
+        this.tempo = 500;
+        this.division = 1;
 
         this.ticks = 0;
         this.frames = 0;
@@ -20,14 +20,6 @@ export default class Metronome
         this.seconds = audioctx.currentTime;
     }
 
-    set tempo(value) {
-        this._tempo = value;
-    }
-
-    set division(value) {
-        this._division = value;
-    }
-
     getTime() {
         return this.ctx.currentTime - this.seconds;
     }
@@ -40,15 +32,15 @@ export default class Metronome
         this.seconds = this.ctx.currentTime;
 
         cancelAnimationFrame(this.frames)
-        this.frames = requestAnimationFrame(() => this.tick())
+        this.frames = requestAnimationFrame(() => this.#next())
     }
 
-    tick() {
+    #next() {
         if ( (this.ctx.currentTime - this.seconds) >= (this._tempo/1000) ) {
             this.seconds = this.ctx.currentTime;
             console.log("click")
         }
-        this.frames = requestAnimationFrame(() => this.tick())
+        this.frames = requestAnimationFrame(() => this.#next())
     }
 
     stop() {

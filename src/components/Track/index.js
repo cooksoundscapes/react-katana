@@ -9,6 +9,8 @@ export default function({trackInfo})
             <CommandBar 
                 name={trackInfo.filename} 
                 trackId={trackInfo.id}
+                syncMode={trackInfo.syncMode}
+                playStyle={trackInfo.playStyle}
             />
             <SliceBox 
                 audioIsLoaded={trackInfo.tempo > 0}

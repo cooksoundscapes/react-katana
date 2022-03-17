@@ -6,6 +6,7 @@ export default class AudioController
         this.masterVol = null;
         this.trackPlayers = [];
         this.metronome = null;
+        this._tempo = 500;
     }
 
     static id_generator = 0;
@@ -30,7 +31,9 @@ export default class AudioController
             id: id,
             buffer: buffer,
             playhead: null,
-            gainCtrl: null
+            gainCtrl: null,
+            isPlaying: false,
+            stopTimer: 0
         })
     }
     getBufferById(id) {
@@ -62,6 +65,7 @@ export default class AudioController
         if (!track) { console.log("track not found") ; return }
         
         if (track.playhead) track.playhead.stop();
+        clearTimeout(track.stopTimer)
 
         track.playhead = this.ctx.createBufferSource();
         track.playhead.buffer = track.buffer;
@@ -69,7 +73,10 @@ export default class AudioController
         track.gainCtrl = this.ctx.createGain(trackInfo.level);
         track.gainCtrl.connect(this.masterVol);
         
-        track.playhead.playbackRate.value = trackInfo.speed;
+        if (trackInfo.syncMode === "Follow") {
+            const speed = trackInfo.tempo / this.tempo;
+            track.playhead.playbackRate.value = speed;
+        }
 
         track.playhead.connect(track.gainCtrl);
 
@@ -79,6 +86,8 @@ export default class AudioController
         
         const startPoint = (track.buffer.duration * trackInfo.trimStart) + (duration * sliceRatio);
         let length;
+
+        track.isPlaying = true;
 
         switch (trackInfo.playStyle) {
             case "Oneshot":
@@ -99,5 +108,7 @@ export default class AudioController
                 console.log("track", trackInfo.id, "playMode incorrect;")
                 break;
         }
+        if (trackInfo.playStyle !== "Looped")
+            track.stopTimer = setTimeout( () => track.isPlaying = false, length);
     }
 }

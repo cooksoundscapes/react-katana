@@ -19,7 +19,6 @@ const trackSlice = createSlice({
                 reverse: false,
                 trimStart: 0,
                 trimEnd: 1,
-                speed: 1,
                 keyboardRow: null,
                 group: 1
             }
