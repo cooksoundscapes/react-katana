@@ -21,11 +21,11 @@ function gridCoords (key) {
 
 export function KeyboardSequencer()
 {
-    const {keyboardPlay} = useAudio();
+    const {playWithGrid} = useAudio();
 
     const padPress = event => {
         const coord = gridCoords(event.key.toLowerCase());
-        if (coord) keyboardPlay(coord)
+        if (coord) playWithGrid(coord)
     }
 
     useEffect( () => {

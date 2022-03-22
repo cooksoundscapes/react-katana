@@ -41,7 +41,9 @@ export default class AudioController
         if (buffObj) return buffObj.buffer;
     }
 
-    changeLive(id, param, value) {
+    changeLive(id, param, value) 
+    {
+        //this method should be called at param change, by the state manager;
         const track = this.trackPlayers.find( track => track.id === id); 
         if (!track) { console.log("track not found") ; return }
         if (!track.playhead) { console.log("track never played") ; return }

@@ -31,9 +31,9 @@ export default function SliceArray
     return (
         <div 
             className={styles.slicesArea}
-            style={{ flex:  (trimBars[1] - trimBars[0]) }}
+            style={{ flex:  (trimBars.end - trimBars.start) }}
         >   
             {sliceArray}
         </div>
-        )
+    )
 }

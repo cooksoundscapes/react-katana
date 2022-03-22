@@ -4,7 +4,7 @@ import { useAudio } from "../../audio_core/AudioContext"
 
 export default function TrimBars({trackId, children})
 {
-    const [barsPosition, setBars] = useState([0, 1])    
+    const [barsPosition, setBars] = useState({start: 0, end:1})    
     const {setParam} = useAudio();
 
     const childrenWithProps = React.Children.map( children, child => {
@@ -18,9 +18,9 @@ export default function TrimBars({trackId, children})
     return (
         <>
         <BarHandler 
-            max={barsPosition[1]}
+            max={barsPosition.end}
             getValue={v => {
-                setBars(prev => [v, prev[1]]);
+                setBars( prev => ({start: v, end: prev.end}) );
                 setParam(trackId, "trimStart", v)
             }} 
             side="left"
@@ -31,10 +31,10 @@ export default function TrimBars({trackId, children})
         <BarHandler 
             min={barsPosition[0]} 
             getValue={v => {
-                setBars(prev => [prev[0], v]);
+                setBars( prev => ({start: prev.start, end: v}) );
                 setParam(trackId, "trimEnd", v)
             }} 
-            startingPosition={1}
+            startingPosition={barsPosition.end}
             side="right" 
         />
         </>

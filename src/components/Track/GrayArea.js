@@ -2,7 +2,7 @@ import styles from "./slices.module.scss"
 
 export default function GrayArea({trimBars, start, end})
 {
-    const flexAmount = start ? trimBars[0] : end ? (1 - trimBars[1]) : null;
+    const flexAmount = start ? trimBars.start : end ? (1 - trimBars.end) : null;
 
     return (
         <div 
