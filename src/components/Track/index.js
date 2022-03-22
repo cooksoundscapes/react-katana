@@ -13,7 +13,7 @@ export default function({trackInfo})
                 playStyle={trackInfo.playStyle}
             />
             <SliceBox 
-                audioIsLoaded={trackInfo.tempo > 0}
+                audioIsLoaded={trackInfo.loaded}
                 sliceCount={trackInfo.slices} 
                 trackId={trackInfo.id}
                 sliceLabels={trackInfo.keyboardRow >= 0 ? Grid[trackInfo.keyboardRow] : null}

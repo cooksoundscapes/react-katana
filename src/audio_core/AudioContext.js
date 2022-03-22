@@ -1,12 +1,9 @@
 import { createContext, useContext } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { addTrack, changeTrack } from "../audio_core/redux_store"
+import { addTrack, changeTrack } from "./Store"
 import AudioController from "./AudioController";
-import readAudioFile from "./readAudioFile";
-import findTempo from "./findTempo"
-import drawWaveForm from "./drawWaveform"
 import Metronome from "./Metronome";
-import bpm_or_ms from "./bpm_or_ms";
+import { readAudioFile, findTempo, drawWaveform }  from "./functions"
 /*
 This is the front layer of the audio API; components should only talk to this 
 context in order to interact with AudioController or Store.
@@ -31,7 +28,7 @@ export default function AudioProvider({children})
          * the Redux store. 
          */
         AudioControl.startDSP();
-        if (!Metro.ctx) {
+        if (!AudioControl.metronome) {
             Metro.activate(AudioControl.ctx);
             AudioControl.metronome = Metro;
         }
@@ -40,18 +37,19 @@ export default function AudioProvider({children})
         
         readAudioFile(file, AudioControl.ctx).then(
             audioBuffer => {
-                AudioControl.addBuffer(audioBuffer, newId)
                 const guessedTempo = findTempo(audioBuffer.duration);
+                
+                AudioControl.addBuffer(audioBuffer, newId, guessedTempo);
+                
                 dispatch( changeTrack({
                     id: newId, 
-                    tempo: guessedTempo
+                    loaded: true
                 }));
             }
         )
         const fileInfo = {
             id: newId,
-            name: file.name,
-            tempo: 0
+            name: file.name
         }
         dispatch( addTrack(fileInfo) );
     }
@@ -62,7 +60,7 @@ export default function AudioProvider({children})
 
     const drawWave = (id, canvas) => {
         const buffer = AudioControl.getBufferById(id);
-        drawWaveForm(buffer, canvas);
+        drawWaveform(buffer, canvas);
     }
 
     const switchLead = (id) => {
@@ -74,30 +72,29 @@ export default function AudioProvider({children})
     }
 
     const setParam = (id, param, value) => {
-        if ( ["trimStart", "trimEnd", "playStyle"].includes(param) ) {
+        if ( AudioControl.liveControllers.includes(param) ) {
             AudioControl.changeLive(id, param, value)
         } 
-        if (param === "syncMode") {
-            if (value === "Lead") switchLead(id);
-        }
+        if (param === "syncMode" && value === "Lead") switchLead(id);
+
         dispatch ( changeTrack({id: id, [param]: value}) )
     }
 
     const play = (slice, trackId) => {
         const trackInfo = tracks.find( track => track.id === trackId);
-        AudioControl.playTrack(slice, trackInfo);
+        if(trackInfo) AudioControl.playTrack(slice, trackInfo);
     }
 
-    const keyboardPlay = (coord) => {
-        const matches = tracks.filter( track => track.keyboardRow === coord[0])
+    const playWithGrid = (row, column) => {
+        const matches = tracks.filter( track => track.keyboardRow === row)
         matches.forEach( track => {
-            AudioControl.playTrack(coord[1], track)
+            AudioControl.playTrack(column, track)
         })
     }
 
     return (
         <AudioContext.Provider value={{
-            createTrack, setMasterVolume, drawWave, play, keyboardPlay, setParam
+            createTrack, setMasterVolume, drawWave, play, playWithGrid, setParam
         }}>
             {children}
         </AudioContext.Provider>

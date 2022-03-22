@@ -10,14 +10,24 @@ export default class Metronome
         this.ticks = 0;
         this.frames = 0;
         this.playing = false;
+        this._sound = null;
 
         this.barLength = 4;
         this.barRatio = 1; //lower number, divided by 4
+
+        this.actionsPerFrame = [];
+        this.actionsPerTick = [];
+    }
+
+    set sound(generator) {
+        this._sound = generator;
     }
 
     activate(audioctx) {
+        if (this.ctx) return;
         this.ctx = audioctx;
         this.seconds = audioctx.currentTime;
+        this.start();
     }
 
     getTime() {
@@ -36,9 +46,11 @@ export default class Metronome
     }
 
     #next() {
-        if ( (this.ctx.currentTime - this.seconds) >= (this._tempo/1000) ) {
+        this.actionsPerFrame.forEach(action => action());
+
+        if ( (this.ctx.currentTime - this.seconds) >= (this.tempo/1000) ) {
             this.seconds = this.ctx.currentTime;
-            console.log("click")
+            this.actionsPerTick.forEach(action => action());    
         }
         this.frames = requestAnimationFrame(() => this.#next())
     }

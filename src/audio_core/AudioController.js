@@ -1,3 +1,5 @@
+import { findTempo, findSyncRatio } from "./functions"
+import Playhead from "./Playhead";
 
 export default class AudioController
 {
@@ -6,7 +8,13 @@ export default class AudioController
         this.masterVol = null;
         this.trackPlayers = [];
         this.metronome = null;
-        this._tempo = 500;
+        this.liveControllers = [
+            "trimStart", 
+            "trimEnd", 
+            "playStyle",
+            "level",
+            "syncMode"
+        ];
     }
 
     static id_generator = 0;
@@ -16,9 +24,14 @@ export default class AudioController
 
     startDSP() {
         if (this.ctx) return;
+
         this.ctx = new window.AudioContext || window.webkitAudioContext;
         this.masterVol = this.ctx.createGain(1);
         this.masterVol.connect(this.ctx.destination)
+    }
+
+    set tempo(value) {
+        this.metronome.tempo = value;
     }
 
     setMasterVol(value) {
@@ -26,16 +39,17 @@ export default class AudioController
         this.masterVol.gain.value = value
     }
 
-    addBuffer(buffer, id) {
-        this.trackPlayers.push({
-            id: id,
-            buffer: buffer,
-            playhead: null,
-            gainCtrl: null,
-            isPlaying: false,
-            stopTimer: 0
-        })
+    addBuffer(buffer, id, tempo) {
+        this.trackPlayers.push( new Playhead(
+            this.ctx, 
+            id, 
+            buffer, 
+            tempo, 
+            this.masterVol,
+            () => this.metronome.tempo
+        ));
     }
+
     getBufferById(id) {
         const buffObj = this.trackPlayers.find( trk => trk.id === id);
         if (buffObj) return buffObj.buffer;
@@ -46,71 +60,50 @@ export default class AudioController
         //this method should be called at param change, by the state manager;
         const track = this.trackPlayers.find( track => track.id === id); 
         if (!track) { console.log("track not found") ; return }
-        if (!track.playhead) { console.log("track never played") ; return }
 
         switch (param) {
             case "trimStart":
-                track.playhead.loopStart = value * track.buffer.duration;
+                track.trimStart = value;
                 break;
+
             case "trimEnd":
-                track.playhead.loopEnd = value * track.buffer.duration;
+                track.trimEnd = value;
                 break;
+
             case "playStyle":
-                track.playhead.loop = (value == "Looped");
+                track.setLoop(value);
+                break;
+
+            case "level":
+                track.gainCtrl.gain.value = value;
+                break;
+
+            case "syncMode":
+                track.sync = (value === "Follow");
                 break;
         }
     }
 
     playTrack(slice, trackInfo) {
         const track = this.trackPlayers.find( track => track.id === trackInfo.id); 
-
-        if (!track) { console.log("track not found") ; return }
-        
-        if (track.playhead) track.playhead.stop();
-        clearTimeout(track.stopTimer)
-
-        track.playhead = this.ctx.createBufferSource();
-        track.playhead.buffer = track.buffer;
-
-        track.gainCtrl = this.ctx.createGain(trackInfo.level);
-        track.gainCtrl.connect(this.masterVol);
-        
-        if (trackInfo.syncMode === "Follow") {
-            const speed = trackInfo.tempo / this.tempo;
-            track.playhead.playbackRate.value = speed;
+        if (!track) { 
+            console.log("track not found"); 
+            return; 
         }
+        const startSlice =(slice/trackInfo.slices);
+        const sliceSize = (1/trackInfo.slices);
 
-        track.playhead.connect(track.gainCtrl);
-
-        const sliceRatio =(slice/trackInfo.slices);
-
-        const duration = track.buffer.duration * (trackInfo.trimEnd - trackInfo.trimStart)
-        
-        const startPoint = (track.buffer.duration * trackInfo.trimStart) + (duration * sliceRatio);
-        let length;
-
-        track.isPlaying = true;
+        track.prepare(this.ctx);
 
         switch (trackInfo.playStyle) {
             case "Oneshot":
-                length = duration - (duration * sliceRatio);
-                track.playhead.start(0, startPoint, length)
+                track.playOnce(startSlice);
                 break;
             case "Looped":
-                track.playhead.loop = true;
-                track.playhead.loopStart = trackInfo.trimStart * track.buffer.duration;
-                track.playhead.loopEnd = trackInfo.trimEnd * track.buffer.duration;
-                track.playhead.start(0, startPoint);
+                track.playLooped(startSlice);
                 break;
             case "Slices":
-                length = duration * (1/trackInfo.slices)
-                track.playhead.start(0, startPoint, length)
-                break;
-            default: 
-                console.log("track", trackInfo.id, "playMode incorrect;")
-                break;
+                track.playOnce(startSlice, sliceSize);
         }
-        if (trackInfo.playStyle !== "Looped")
-            track.stopTimer = setTimeout( () => track.isPlaying = false, length);
     }
 }

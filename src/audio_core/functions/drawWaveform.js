@@ -1,5 +1,5 @@
 
-export default function drawWaveform(audio, canvas)
+export function drawWaveform(audio, canvas)
 {
     const audioData = audio.getChannelData(0);
     const width = canvas.width;

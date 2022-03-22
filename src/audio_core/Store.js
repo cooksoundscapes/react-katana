@@ -10,7 +10,7 @@ const trackSlice = createSlice({
             const newTrack = {
                 id: fileInfo.payload.id,
                 filename: fileInfo.payload.name,
-                tempo: fileInfo.payload.tempo,
+                loaded: false,
                 level: 1,
                 slices: 8,
                 playStyle: "Oneshot",
